@@ -105,3 +105,9 @@ captiq-admin-components/
 
 #kbdx
 *.kdbx
+
+
+#jerson
+admin/.dbdata
+main/.dbdata
+python-env
