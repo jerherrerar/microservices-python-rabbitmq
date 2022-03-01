@@ -1,5 +1,7 @@
-from email.mime import image
-from flask import Flask
+import requests
+from urllib import request
+from dataclasses import dataclass
+from flask import Flask, jsonify
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import UniqueConstraint
@@ -10,7 +12,12 @@ CORS(app)
 
 db= SQLAlchemy(app)
 
+@dataclass
 class Product(db.Model):
+    id: int
+    title: str
+    image: str
+
     id = db.Column(db.Integer, primary_key=True, autoincrement=False)
     title = db.Column(db.String(200))
     image = db.Column(db.String(200))
@@ -24,9 +31,16 @@ class ProductUser(db.Model):
 
 
 
-@app.route('/')
+@app.route('/api/products')
 def index():
-    return 'hello'
+    return jsonify(Product.query.all())
+
+@app.route('/api/products/<int:id>/like', methods=['POST'])
+def like(id):
+    req = requests.get('http://docker.for.mac.localhost:8000/api/user')
+    # how to connect with another docker container localhost
+    return jsonify(req.json())
+
 
 
 if __name__ == '__main__':
